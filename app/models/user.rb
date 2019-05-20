@@ -11,6 +11,9 @@ class User < ApplicationRecord
                     uniqueness: true    
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  validates :department, length: { in: 3..50 }, allow_blank: true
+  validates :basic_time, presence: true
+  validates :work_time, presence: true
   
   # 渡された文字列のハッシュ値を返します。
   def User.digest(string)
@@ -44,5 +47,10 @@ class User < ApplicationRecord
   # ユーザーのログイン情報を破棄します。
   def forget
     update_attribute(:remember_digest, nil)
+  end
+  
+  # 引数に指定したカラム名を返します。
+  def self.column_name(sym)
+    self.human_attribute_name(sym)
   end
 end
