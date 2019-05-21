@@ -9,6 +9,19 @@ class UsersController < ApplicationController
   end
   
   def show
+    @first_day = params[:first_day].nil? ? Date.current.beginning_of_month : params[:first_day].to_date
+    @last_day = @first_day.end_of_month
+    
+    unless @user.attendances_exists?(@first_day)
+      ActiveRecord::Base.transaction do
+        one_month_dates(@first_day).each { |day| @user.attendances.create!(worked_on: day) }
+      end
+    end
+    
+    @dates = @user.one_month_attendances(@first_day, @last_day)
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger] = "ページ情報の取得に失敗しました、再アクセスしてください。"
+    redirect_to users_url
   end
 
   def new

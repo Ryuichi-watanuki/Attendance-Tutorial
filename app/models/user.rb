@@ -3,6 +3,8 @@ class User < ApplicationRecord
   attr_accessor :remember_token
   before_save { self.email = email.downcase }
   
+  has_many :attendances, dependent: :destroy
+  
   validates :name,  presence: true, length: { maximum: 50 }
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -47,6 +49,17 @@ class User < ApplicationRecord
   # ユーザーのログイン情報を破棄します。
   def forget
     update_attribute(:remember_digest, nil)
+  end
+  
+  # 渡された日付の月を対象に一月分のデータが存在するか判定します。
+  def attendances_exists?(day)
+    one_month_dates = [*day.beginning_of_month..day.end_of_month].count
+    self.attendances.where(worked_on: day.beginning_of_month..day.end_of_month).
+    count == one_month_dates ? true : false
+  end
+  
+  def one_month_attendances(first_day, last_day)
+    self.attendances.where(worked_on: first_day..last_day)
   end
   
   # 引数に指定したカラム名を返します。

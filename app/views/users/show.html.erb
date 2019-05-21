@@ -16,3 +16,36 @@
     </tr>
   </table>
 </div>
+
+<div>
+  <table class = "table table-bordered table-condensed table-hover table-attendances">
+    <thead>
+      <tr> <!--rowspan:縦結合、colspan：横結合-->
+        <th>
+          <%= link_to "←", user_path(first_day: @first_day.prev_month), class: "btn btn-xs btn-primary" %>
+          &emsp;日付&emsp;
+          <%= link_to "→", user_path(first_day: @first_day.next_month), class: "btn btn-xs btn-primary" %>
+        </th>
+        <th>曜日</th>
+        <th>勤怠登録</th>
+        <th>出社時刻</th>
+        <th>退社時刻</th>
+        <th>在社時間</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @dates.each do |day| %>
+        <tr>
+          <td><%= day.worked_on %></td>
+          <td><%= $WEEKS[day.worked_on.wday] %></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
