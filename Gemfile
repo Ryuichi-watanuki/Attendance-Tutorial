@@ -18,6 +18,8 @@ gem 'jbuilder',     '~> 2.5'
 group :development, :test do
   gem 'sqlite3'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'factory_bot_rails', '~> 4.11'
+  gem 'spring-commands-rspec'
 end
 
 group :development do
@@ -25,6 +27,13 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+group :test do
+  gem 'capybara', '>= 2.15'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
+  gem 'rspec-rails', '~> 3.7'
 end
 
 # Windows環境ではtzinfo-dataというgemを含める必要があります
