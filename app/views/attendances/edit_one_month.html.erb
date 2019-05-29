@@ -18,7 +18,9 @@
           <%= f.fields_for "attendances[]", day do |af| %>
             <tr>
               <td><%= l(day.worked_on, format: :short) %></td>
-              <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+              <td class="days-color-<%= n = day.worked_on.wday %>">
+                <%= $days_of_the_week[n] %>
+              </td>
               <% if !current_user.admin? && (Date.current < day.worked_on) %>
                 <td><%= af.time_field :started_at, readonly: true, class: "form-control" %></td>
                 <td><%= af.time_field :finished_at, readonly: true, class: "form-control" %></td>

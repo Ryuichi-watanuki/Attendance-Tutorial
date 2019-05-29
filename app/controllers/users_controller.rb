@@ -6,7 +6,18 @@ class UsersController < ApplicationController
   before_action :set_one_month, only: :show
 
   def index
-    @users = User.paginate(page: params[:page])
+    if params[:q] && params[:q].reject { |key, value| value.blank? }.present?
+      @q = User.ransack(search_params)
+      @title = "検索結果"
+    else
+      @q = User.ransack
+      @title = "全てのユーザー"
+    end
+    @users = @q.result.paginate(page: params[:page])
+    if @title == "検索結果"
+      flash.now[:info] = @users.count > 0 ?
+      "#{@users.count}件のユーザーが見つかりました" : "検索結果は0件でした"
+    end
   end
   
   def show
@@ -66,6 +77,10 @@ class UsersController < ApplicationController
     
     def basic_info_params
       params.require(:user).permit(:department, :basic_time, :work_time)
+    end
+    
+    def search_params
+      params.require(:q).permit(:name_cont)
     end
     
     # beforeフィルター
