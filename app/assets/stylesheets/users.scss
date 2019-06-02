@@ -71,3 +71,21 @@
   margin: 15px 0;
   width: 30%;
 }
+
+/* 検索フォーム */
+
+#user_search {
+  overflow: auto;
+  float: right;
+  margin: 20px 0;
+
+  .input-group {
+    width: 350px;
+    .form-control {
+      width: 280px;
+    }
+    .btn {
+      width: 70px;
+    }
+  }
+}
