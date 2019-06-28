@@ -9,7 +9,7 @@
     </tr>
 
     <tr>
-      <td>所属：<%= @user.department.present? ? @user.department : "未所属" %></td>
+      <td>所属：<%= @user.department_status %></td>
       <td>名前：<%= @user.name %></td>
       <td>出勤日数：<%= @worked_sum %>日</td>
       <td>月末日：<%= l(@last_day, format: :short) %></td>
@@ -49,8 +49,8 @@
               <%= link_to "#{btn_text}登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
             <% end %>
           </td>
-          <td><%= l(started_at_to_15_in_minutes(day.started_at), format: :time) if day.started_at.present? %></td>
-          <td><%= l(finished_at_to_15_in_minutes(day.finished_at), format: :time) if day.finished_at.present? %></td>
+          <td><%= day.started_status %></td>
+          <td><%= day.finished_status %></td>
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
               <% start = started_at_to_15_in_minutes(day.started_at) %>

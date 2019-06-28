@@ -18,4 +18,8 @@ class Attendance < ApplicationRecord
       errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
     end
   end
+  
+  scope :one_month, -> (first, last) { where(worked_on: first..last) }
+  scope :worked_order, -> { order(:worked_on) }
+  scope :worked_dates, -> { where.not(started_at: nil) }
 end
