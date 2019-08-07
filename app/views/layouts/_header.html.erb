@@ -6,6 +6,9 @@
         <li><%= link_to "ホーム", root_path %></li>
         <% if logged_in? %>
           <li><%= link_to "全てのユーザー", users_path %></li>
+          <% if current_user.admin? %>
+            <li><%= link_to "出勤中一覧", attendances_workers_user_path(current_user) %></li>
+          <% end %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               メニュー <b class="caret"></b>

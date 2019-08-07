@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_many :attendances, dependent: :destroy
   # 「remember_token」という仮想の属性を作成します。
   attr_accessor :remember_token
-  # before_save { self.email = email.downcase }
+  before_save { self.email = email.downcase }
   
   validates :name, presence: true, length: { maximum: 50 }
   
@@ -15,6 +15,13 @@ class User < ApplicationRecord
   validates :work_time, presence: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  
+  # 当日の日付を持ち、かつ出勤時間のみに値が存在する状態のユーザーを取得する
+  scope :workers, -> { 
+    joins(:attendances).
+    where(attendances: { worked_on: Date.current, finished_at: nil }).  
+    where.not(attendances: { started_at: nil })
+  }
   
   # 渡された文字列のハッシュ値を返します。
   def User.digest(string)
