@@ -4,8 +4,8 @@
   <div class="col-xs-12 col-md-10 col-md-offset-1">
     <h1>出勤中社員一覧</h1>
     
-    <% if @workers.count != 0 %>
-      <h3>現在出勤中のスタッフ：<%= @workers.count.to_s %>名</h3>
+    <% if @working_attendances.count != 0 %>
+      <h3>現在出勤中のスタッフ：<%= @working_attendances.count.to_s %>名</h3>
       <table class = "table table-hover table-responsive">
         <thead>
           <tr>
@@ -16,12 +16,13 @@
         　</tr>
         </thead>  
         <tbody>
-        　<% @workers.each do |worker| %>
+        　<% @working_attendances.each do |attendance| %>
+            <% user = attendance.user %>
           　<tr>
-              <td><%= link_to worker.name, worker %></td>
-              <td><%= worker.department_status %></td>
-              <td><%= worker.attendances.working.work_start %></td>
-              <td><%= worker.attendances.working.note %></td>
+              <td><%= link_to user.name, user %></td>
+              <td><%= user.department_status %></td>
+              <td><%= attendance.started_at %></td>
+              <td><%= attendance.note %></td>
             </tr>
           <% end %>
         </tbody>

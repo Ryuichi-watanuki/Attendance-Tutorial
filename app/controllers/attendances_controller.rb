@@ -7,7 +7,7 @@ class AttendancesController < ApplicationController
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
   def workers
-    @workers = User.workers
+    @working_attendances = Attendance.working
   end
   
   def update

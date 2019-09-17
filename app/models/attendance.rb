@@ -8,11 +8,6 @@ class Attendance < ApplicationRecord
   # 出勤・退勤時間どちらも存在する時、出勤時間より早い退勤時間は無効
   validate :started_at_than_finished_at_fast_if_invalid
   
-  # 親モデルとなるユーザーの指定の1ヶ月分のデータを取得する
-  scope :one_month_dates, -> (first_day, last_day) {
-    where(worked_on: first_day..last_day).order(:worked_on)
-  }
-  
   def finished_at_is_invalid_without_a_started_at
     errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
   end
@@ -23,7 +18,19 @@ class Attendance < ApplicationRecord
     end
   end
   
-  scope :working, -> { find_by(worked_on: Date.current) }
+  class << self
+    # 現在出勤している勤怠データを返す
+    def working
+      self.where(worked_on: Date.current, finished_at: nil).
+      where.not(started_at: nil).
+      order(:user_id)
+    end
+  end
+  
+  # 親モデルとなるユーザーの指定の1ヶ月分のデータを取得する
+  scope :one_month_dates, -> (first_day, last_day) {
+    where(worked_on: first_day..last_day).order(:worked_on)
+  }
   scope :worked_dates, -> { where.not(started_at: nil) }
   scope :testes, -> { working.worked_dates }
   
